@@ -1,0 +1,22 @@
+{
+  "name": "snabbdom-form-helpers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.23.0",
+    "snabbdom": "^0.6.7"
+  },
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3",
+    "tape-run": "^3.0.0"
+  }
+}
+
