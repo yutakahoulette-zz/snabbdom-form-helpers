@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "watchify docs/index.js -o docs/build.js -v || true"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,7 @@
     "browserify": "^14.1.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
-    "tape-run": "^3.0.0"
+    "tape-run": "^3.0.0",
+    "watchify": "^3.9.0"
   }
 }
-
