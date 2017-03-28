@@ -32,6 +32,11 @@ var vnode = h('div', [
     , {name: 'cash'}
     ]})
   ])
+, h('section', [
+    h('label', 'Select')
+  , fh.select({placeholder: 'Contact preference', name: 'contact-preference', options: [
+    'SMS', 'phone', 'email', 'mail']})
+  ])
 ])
 
 patch(container, vnode)

@@ -1,15 +1,22 @@
 var h = require('snabbdom/h').default
-var R = require('ramda')
 var card = require('creditcards/card') 
 var uuid = require('uuid/v4')
+var map = require('ramda/src/map')
+var concat = require('ramda/src/concat')
+var reduce = require('ramda/src/reduce')
+var drop = require('ramda/src/drop')
+var trim = require('ramda/src/trim')
+var join = require('ramda/src/join')
+var splitAt = require('ramda/src/splitAt')
+var compose = require('ramda/src/compose')
 
 // helper functions
 
 var classObj = function(classes) { 
-  return R.reduce(
+  return reduce(
     function(a, b) {a[b] = true; return a}
     , {}
-    , R.drop(1, classes.split('.'))
+    , drop(1, classes.split('.'))
   )
 }
 
@@ -19,12 +26,12 @@ var removeSpace = function(st) {
 }
 
 var formatPhone = function(num) {
-  return R.compose(
-    R.trim()
-  , R.join(' ')
-  , R.splitAt(7)
-  , R.join(' ')
-  , R.splitAt(3)
+  return compose(
+    trim()
+  , join(' ')
+  , splitAt(7)
+  , join(' ')
+  , splitAt(3)
   )(num)
 }
 
@@ -89,7 +96,7 @@ var cardInput = function(obj) {
 
 var checkBox = function(obj){
   var id = uuid()
-  return h('div' , [ 
+  return h('div', {class: obj.classes ? classObj(obj.classes) : {}}, [
     h('input', {
       props: {
         type: 'checkbox'
@@ -122,7 +129,32 @@ var radio = function(name) {
 }
 
 var radios = function(obj) {
-  return h('div', R.map(radio(obj.name), obj.labels))
+  return h('div', {class: obj.classes ? classObj(obj.classes) : {}}
+  , map(radio(obj.name), obj.labels))
+}
+
+var option = function(selected) {
+  return function(option) {
+    return h('option', {
+      props: {
+        value: option
+      , selected: selected && selected === option
+      }
+    }, option)
+  }
+}
+
+var select = function(obj) {
+  var placeholder = [h('option', {
+    props: {
+      disabled: 'true'
+    , value: ' '
+    , selected: 'true'
+    }
+  }, obj.placeholder || 'Select One')]
+
+  return h('select', {props: {name: obj.name}}
+  , concat(placeholder, map(option(obj.selected), obj.options)))
 }
 
 module.exports = {
@@ -130,5 +162,6 @@ module.exports = {
 , cardInput:  cardInput 
 , checkBox: checkBox
 , radios: radios
+, select: select
 }
 
