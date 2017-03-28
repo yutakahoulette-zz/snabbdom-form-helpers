@@ -56,8 +56,6 @@ var join = require('ramda/src/join')
 var splitAt = require('ramda/src/splitAt')
 var compose = require('ramda/src/compose')
 
-// helper functions
-
 var classObj = function(classes) { 
   return reduce(
     function(a, b) {a[b] = true; return a}
@@ -109,8 +107,6 @@ var phoneMask = function(ev) { return mask(ev, updatePhoneInput) }
 
 var cardMask = function(ev) { return mask(ev, updateCardInput) }
 
-// input functions
-
 var props = function(name, placeholder, value) {
   return { 
     type: 'text'
@@ -138,7 +134,6 @@ var cardInput = function(obj) {
     }
   })
 }
-
 
 var checkBox = function(obj){
   var id = uuid()
@@ -207,9 +202,12 @@ module.exports = {
   phoneInput: phoneInput 
 , cardInput:  cardInput 
 , checkBox: checkBox
+, formatPhone: formatPhone
+, formatCard: card.format
 , radios: radios
 , select: select
 }
+
 
 
 },{"creditcards/card":6,"ramda/src/compose":10,"ramda/src/concat":11,"ramda/src/drop":13,"ramda/src/join":53,"ramda/src/map":56,"ramda/src/reduce":58,"ramda/src/splitAt":62,"ramda/src/trim":65,"snabbdom/h":67,"uuid/v4":83}],3:[function(require,module,exports){
