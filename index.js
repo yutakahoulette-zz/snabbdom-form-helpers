@@ -1,6 +1,7 @@
 var h = require('snabbdom/h').default
 var R = require('ramda')
 var card = require('creditcards/card') 
+var uuid = require('uuid/v4')
 
 // helper functions
 
@@ -57,50 +58,54 @@ var cardMask = function(ev) { return mask(ev, updateCardInput) }
 
 // input functions
 
-var textInput = function(name, value, placeholder, classes){
-  return h('input', {
-    class: classes ? classObj(classes) : {}
-  , props: {
-      type: 'text'
-    , name: name
-    , placeholder: placeholder
-    , value: value || ''
-    }
-  })
+var props = function(name, placeholder, value) {
+  return { 
+    type: 'text'
+  , name: name
+  , placeholder: placeholder
+  , value: value || ''
+  }
 }
 
-var phoneInput = function(name, value, placeholder, classes) {
+var phoneInput = function(obj) {
   return h('input', {
     on: {input: phoneMask}
-  , class: classes ? classObj(classes) : {}
-  , props: {
-      type: 'text'
-    , name: name
-    , placeholder: placeholder
-    , value: value ? formatPhone(value) : ''
+  , class: obj.classes ? classObj(obj.classes) : {}
+  , props: props(obj.name, obj.placeholder, obj.value ? formatPhone(obj.value) : '')
+  })
+}
+
+var cardInput = function(obj) {
+  return h('input', {
+    on: {input: cardMask}
+  , class: obj.classes ? classObj(obj.classes) : {}
+  , props: props(obj.name, obj.placeholder, obj.value ? card.format(obj.value) : '')
+  , attrs: {
+      'data-card-type': obj.value ? card.type(obj.value, true) : ''
     }
   })
 }
 
-var cardInput = function(name, value, placeholder, classes) {
-  return h('input', {
-    on: {input: cardMask}
-  , class: classes ? classObj(classes) : {}
-  , props: {
-      type: 'text'
-    , name: name
-    , placeholder: placeholder
-    , value: value ? card.format(value) : '' 
-    }
-  , attrs: {
-      'data-card-type': value ? card.type(value, true) : ''
-    }
-  })
+
+var checkBox = function(obj){
+  var id = uuid()
+  return h('div' , [ 
+    h('input', {
+      props: {
+        type: 'checkbox'
+      , id: id
+      , value: obj.value
+      , name: obj.name
+      , checked: obj.checked
+      }
+    })
+  , h('label', { attrs: {for: id}}, obj.label ? obj.label : obj.value)
+  ])
 }
 
 module.exports = {
-  textInput:  textInput
-, phoneInput: phoneInput 
+  phoneInput: phoneInput 
 , cardInput:  cardInput 
+, checkBox: checkBox
 }
 

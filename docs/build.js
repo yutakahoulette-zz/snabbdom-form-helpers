@@ -14,9 +14,11 @@ var container = document.getElementById('container')
 
 var vnode = h('div', [ 
   h('label', 'Phone number')
-, fh.phoneInput('phone', '1234567890', 'Phone number')
+, fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
 , h('label', 'Credit card')
-, fh.cardInput('card', '4242424242424242', 'Credit card number')
+, fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
+, h('label', 'Check box')
+, fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
 ])
 
 patch(container, vnode)
@@ -26,6 +28,7 @@ patch(container, vnode)
 var h = require('snabbdom/h').default
 var R = require('ramda')
 var card = require('creditcards/card') 
+var uuid = require('uuid/v4')
 
 // helper functions
 
@@ -82,55 +85,59 @@ var cardMask = function(ev) { return mask(ev, updateCardInput) }
 
 // input functions
 
-var textInput = function(name, value, placeholder, classes){
-  return h('input', {
-    class: classes ? classObj(classes) : {}
-  , props: {
-      type: 'text'
-    , name: name
-    , placeholder: placeholder
-    , value: value || ''
-    }
-  })
+var props = function(name, placeholder, value) {
+  return { 
+    type: 'text'
+  , name: name
+  , placeholder: placeholder
+  , value: value || ''
+  }
 }
 
-var phoneInput = function(name, value, placeholder, classes) {
+var phoneInput = function(obj) {
   return h('input', {
     on: {input: phoneMask}
-  , class: classes ? classObj(classes) : {}
-  , props: {
-      type: 'text'
-    , name: name
-    , placeholder: placeholder
-    , value: value ? formatPhone(value) : ''
+  , class: obj.classes ? classObj(obj.classes) : {}
+  , props: props(obj.name, obj.placeholder, obj.value ? formatPhone(obj.value) : '')
+  })
+}
+
+var cardInput = function(obj) {
+  return h('input', {
+    on: {input: cardMask}
+  , class: obj.classes ? classObj(obj.classes) : {}
+  , props: props(obj.name, obj.placeholder, obj.value ? card.format(obj.value) : '')
+  , attrs: {
+      'data-card-type': obj.value ? card.type(obj.value, true) : ''
     }
   })
 }
 
-var cardInput = function(name, value, placeholder, classes) {
-  return h('input', {
-    on: {input: cardMask}
-  , class: classes ? classObj(classes) : {}
-  , props: {
-      type: 'text'
-    , name: name
-    , placeholder: placeholder
-    , value: value ? card.format(value) : '' 
-    }
-  , attrs: {
-      'data-card-type': value ? card.type(value, true) : ''
-    }
-  })
+
+var checkBox = function(obj){
+  var id = uuid()
+  return h('div' , [ 
+    h('input', {
+      props: {
+        type: 'checkbox'
+      , id: id
+      , value: obj.value
+      , name: obj.name
+      , checked: obj.checked
+      }
+    })
+  , h('label', { attrs: {for: id}}, obj.label ? obj.label : obj.value)
+  ])
 }
 
 module.exports = {
-  textInput:  textInput
-, phoneInput: phoneInput 
+  phoneInput: phoneInput 
 , cardInput:  cardInput 
+, checkBox: checkBox
 }
 
 
-},{"creditcards/card":6,"ramda":9,"snabbdom/h":318}],3:[function(require,module,exports){
+},{"creditcards/card":6,"ramda":9,"snabbdom/h":318,"uuid/v4":334}],3:[function(require,module,exports){
 'use strict'
 
 var types = exports.types = require('./src/types')
@@ -169,7 +176,7 @@ CardType.prototype.test = function (number, eager) {
   return this[eager ? 'eagerPattern' : 'pattern'].test(number)
 }
 
-},{"xtend/mutable":333}],5:[function(require,module,exports){
+},{"xtend/mutable":336}],5:[function(require,module,exports){
 'use strict'
 
 var Type = require('./type')
@@ -293,7 +300,7 @@ module.exports = extend(ccTypes, {
   }
 })
 
-},{"creditcards-types":3,"to-camel-case":329,"xtend":332}],8:[function(require,module,exports){
+},{"creditcards-types":3,"to-camel-case":329,"xtend":335}],8:[function(require,module,exports){
 'use strict'
 
 module.exports = (function (array) {
@@ -11568,6 +11575,99 @@ function toSpaceCase(string) {
 }
 
 },{"to-no-case":330}],332:[function(require,module,exports){
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function bytesToUuid(buf, offset) {
+  var i = offset || 0;
+  var bth = byteToHex;
+  return  bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]];
+}
+
+module.exports = bytesToUuid;
+
+},{}],333:[function(require,module,exports){
+(function (global){
+// Unique ID creation requires a high quality random # generator.  In the
+// browser this is a little complicated due to unknown quality of Math.random()
+// and inconsistent support for the `crypto` API.  We do the best we can via
+// feature-detection
+var rng;
+
+var crypto = global.crypto || global.msCrypto; // for IE 11
+if (crypto && crypto.getRandomValues) {
+  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+  var rnds8 = new Uint8Array(16);
+  rng = function whatwgRNG() {
+    crypto.getRandomValues(rnds8);
+    return rnds8;
+  };
+}
+
+if (!rng) {
+  // Math.random()-based (RNG)
+  //
+  // If all else fails, use Math.random().  It's fast, but is of unspecified
+  // quality.
+  var  rnds = new Array(16);
+  rng = function() {
+    for (var i = 0, r; i < 16; i++) {
+      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+    }
+
+    return rnds;
+  };
+}
+
+module.exports = rng;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],334:[function(require,module,exports){
+var rng = require('./lib/rng');
+var bytesToUuid = require('./lib/bytesToUuid');
+
+function v4(options, buf, offset) {
+  var i = buf && offset || 0;
+
+  if (typeof(options) == 'string') {
+    buf = options == 'binary' ? new Array(16) : null;
+    options = null;
+  }
+  options = options || {};
+
+  var rnds = options.random || (options.rng || rng)();
+
+  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+  // Copy bytes to buffer, if provided
+  if (buf) {
+    for (var ii = 0; ii < 16; ++ii) {
+      buf[i + ii] = rnds[ii];
+    }
+  }
+
+  return buf || bytesToUuid(rnds);
+}
+
+module.exports = v4;
+
+},{"./lib/bytesToUuid":332,"./lib/rng":333}],335:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -11588,7 +11688,7 @@ function extend() {
     return target
 }
 
-},{}],333:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;

@@ -12,7 +12,8 @@
   "dependencies": {
     "creditcards": "^2.1.2",
     "ramda": "^0.23.0",
-    "snabbdom": "^0.6.7"
+    "snabbdom": "^0.6.7",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "browserify": "^14.1.0",

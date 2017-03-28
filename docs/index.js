@@ -13,9 +13,11 @@ var container = document.getElementById('container')
 
 var vnode = h('div', [ 
   h('label', 'Phone number')
-, fh.phoneInput('phone', '1234567890', 'Phone number')
+, fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
 , h('label', 'Credit card')
-, fh.cardInput('card', '4242424242424242', 'Credit card number')
+, fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
+, h('label', 'Check box')
+, fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
 ])
 
 patch(container, vnode)
