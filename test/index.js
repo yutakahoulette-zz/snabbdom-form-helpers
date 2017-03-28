@@ -42,3 +42,20 @@ test('checkBox', function(t)  {
   t.equal(label.text, 'Donate anonymously?')
   t.end()
 })
+
+test('checkBox', function(t)  {
+  var radios = fh.radios({selected: 'cash', classes: '.red.h1', name: 'payment-method', options: ['check', 'credit card', 'cash']})
+  var cash = radios.children[2] 
+  var input = cash.children[0]
+  var label = cash.children[1]
+  t.ok(radios.data.class.red)
+  t.ok(radios.data.class.h1)
+  t.equal(radios.children.length, 3)
+  t.equal(label.text, 'cash')
+  t.equal(label.data.attrs.for, input.data.props.id)
+  t.equal(input.data.props.name, 'payment-method')
+  t.equal(input.data.props.value, 'cash')
+  t.ok(input.data.props.checked)
+  t.end()
+})
+
