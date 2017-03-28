@@ -16,9 +16,9 @@ takes on object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
-name | String | value of name property of the input | true
 value | String | value of input when checkbox is checked | true
 label | String | label text | true
+name | String | value of name property of the input | false
 checked | Boolean | whether the checkbox is checked | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
 
@@ -43,9 +43,9 @@ takes on object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
-name | String | value of name property of the input | true
+name | String | value of name property of the input | false
 value | String | value of input | false
-placeholder | String | placeholder text | true
+placeholder | String | placeholder text | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
 
 ``` javascript
@@ -72,9 +72,9 @@ takes on object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
-name | String | value of name property of the input | true
+name | String | value of name property of the input | false
+placeholder | String | placeholder text | false
 value | String | value of input | false
-placeholder | String | placeholder text | true
 classes | String | string of class names (`'.mt-2.color-red'`) | false
 
 ``` javascript
@@ -99,9 +99,30 @@ takes on object with the following properties:
 key | type | explanation | required |
 --- | --- | --- | ---
 name | String | value of name property of the input | true
+options | Array of strings | an input and label will be created for each of these label strings  | true
+selected | String | will check an input if the selected string matches the input's value| false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
-labels | Array of strings | an input and label will be created for each of these label strings  | true
-checked | String | will check an input if the checked string matches the input's value| false
+
+``` javascript
+var fh = require('snabbdom-form-helpers')
+
+h('div', [
+  h('label', 'Radios')
+, fh.radios({selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
+])
+```
+
+### select
+
+takes on object with the following properties:
+
+key | type | explanation | required |
+--- | --- | --- | ---
+name | String | value of name property of the select | false
+options | Array of strings | a select option will be created for each of these option strings  | true
+selected | String | will select an option if the selected string matches the option's value| false
+placeholder | String | placeholder option | false
+classes | String | string of class names (`'.mt-2.color-red'`) | false
 
 
 ``` javascript
@@ -109,9 +130,8 @@ var fh = require('snabbdom-form-helpers')
 
 h('div', [
   h('label', 'Radios')
-, fh.radios({name: 'payment-method', labels: ['check', 'credit card', 'cash']})
+, fh.select({name: 'contact-preference', options: ['SMS', 'Email', 'phone']})
 ])
-
-
+```
 
 
