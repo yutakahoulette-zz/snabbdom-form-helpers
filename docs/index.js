@@ -26,11 +26,7 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Radios')
-  , fh.radios({name: 'payment-method', labels: [
-      {name: 'check'}
-    , {name: 'credit card'}
-    , {name: 'cash'}
-    ]})
+  , fh.radios({selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
   ])
 , h('section', [
     h('label', 'Select')

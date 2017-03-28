@@ -105,8 +105,8 @@ var checkBox = function(obj){
   ])
 }
 
-var radio = function(name) {
-  return function(label) {
+var radio = function(name, selected) {
+  return function(option) {
     var id = uuid()
     return h('div', [
         h('input', {
@@ -114,18 +114,18 @@ var radio = function(name) {
             type: 'radio'
           , id: id
           , name: name
-          , value: label.name
-          , checked: label.checked
+          , checked: selected && selected === option 
+          , value: option 
           }
         })
-      , h('label', {attrs: {for: id}}, label.name)
+      , h('label', {attrs: {for: id}}, option)
     ])
   }
 }
 
 var radios = function(obj) {
   return h('div', {class: obj.classes ? classObj(obj.classes) : {}}
-  , map(radio(obj.name), obj.labels))
+  , map(radio(obj.name, obj.selected), obj.options))
 }
 
 var option = function(selected) {

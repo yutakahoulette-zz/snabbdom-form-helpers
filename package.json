@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "browserify test/index.js | tape-run | tap-spec || true",
     "watch": "watchify docs/index.js -o docs/build.js -v || true"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "creditcards": "^2.1.2",
-    "ramda": "^0.23.0",
-    "snabbdom": "^0.6.7",
-    "uuid": "^3.0.1"
+    "creditcards": "2.1.2",
+    "ramda": "0.23.0",
+    "snabbdom": "0.6.7",
+    "uuid": "3.0.1"
   },
   "devDependencies": {
     "browserify": "^14.1.0",
