@@ -11,7 +11,6 @@
 
 <style>
   body {
-    font-size: 16px;
     padding: 16px;
     font-family: Source Code Pro,
       Menlo,
@@ -19,45 +18,58 @@
       Liberation Mono,
       monospace;
   }
+  input,
+  input[type=checkbox]+label, 
+  input[type=radio]+label {
+    font-size: 16px;
+  }
   label { 
-    margin-bottom: 4px;
+    font-size: 18px;
+    margin-bottom: 8px;
     display: block; 
   }
   input { 
     padding: 8px; 
     width: 256px;
-    font-size: 16px;
-    margin-bottom: 32px;
     border: 1px solid grey;
   }
   input[type=checkbox], 
   input[type=radio] {
     display: none;
   }
-
   input[type=checkbox]+label,
   input[type=radio]+label {
     cursor: pointer;
   }
+  section { 
+    margin-bottom: 32px; 
+  }
+  input,
+  input[type=checkbox]+label, 
+  input[type=radio]+label {
+    margin-bottom: 8px;
+  }
 
   input[type=checkbox]+label:before, 
   input[type=radio]+label:before {
-      margin-right: 8px;
-      display: inline-block;
-      color: transparent;
-      text-align: center;
-      padding: 4px;
-      width: 16px;
-      line-height: 16px;
-      border: 1px solid grey;
-      content: "×";
-      margin-bottom: 32px;
+    margin-right: 8px;
+    display: inline-block;
+    color: transparent;
+    text-align: center;
+    padding: 4px;
+    width: 16px;
+    line-height: 16px;
+    border: 1px solid grey;
+    content: "×";
   }
   input[type=checkbox]:checked+label:before, 
   input[type=radio]:checked+label:before {
     border-color: #0176f5;
     background: #78b6ff;
     color: #fff;
+  }
+  input[type=radio]+label:before {
+    border-radius: 100%;
   }
 </style>
 

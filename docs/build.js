@@ -13,12 +13,26 @@ var fh = require('../index')
 var container = document.getElementById('container')
 
 var vnode = h('div', [ 
-  h('label', 'Phone number')
-, fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
-, h('label', 'Credit card')
-, fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
-, h('label', 'Check box')
-, fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
+  h('section', [
+    h('label', 'Phone number')
+  , fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
+  ])
+, h('section', [
+    h('label', 'Credit card')
+  , fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
+  ])
+, h('section', [
+    h('label', 'Check box')
+  , fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
+  ])
+, h('section', [
+    h('label', 'Radios')
+  , fh.radios({name: 'payment-method', labels: [
+      {name: 'check'}
+    , {name: 'credit card'}
+    , {name: 'cash'}
+    ]})
+  ])
 ])
 
 patch(container, vnode)
@@ -130,10 +144,33 @@ var checkBox = function(obj){
   ])
 }
 
+var radio = function(name) {
+  return function(label) {
+    var id = uuid()
+    return h('div', [
+        h('input', {
+          props: {
+            type: 'radio'
+          , id: id
+          , name: name
+          , value: label.name
+          , checked: label.checked
+          }
+        })
+      , h('label', {attrs: {for: id}}, label.name)
+    ])
+  }
+}
+
+var radios = function(obj) {
+  return h('div', R.map(radio(obj.name), obj.labels))
+}
+
 module.exports = {
   phoneInput: phoneInput 
 , cardInput:  cardInput 
 , checkBox: checkBox
+, radios: radios
 }
 
 

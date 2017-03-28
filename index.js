@@ -103,9 +103,32 @@ var checkBox = function(obj){
   ])
 }
 
+var radio = function(name) {
+  return function(label) {
+    var id = uuid()
+    return h('div', [
+        h('input', {
+          props: {
+            type: 'radio'
+          , id: id
+          , name: name
+          , value: label.name
+          , checked: label.checked
+          }
+        })
+      , h('label', {attrs: {for: id}}, label.name)
+    ])
+  }
+}
+
+var radios = function(obj) {
+  return h('div', R.map(radio(obj.name), obj.labels))
+}
+
 module.exports = {
   phoneInput: phoneInput 
 , cardInput:  cardInput 
 , checkBox: checkBox
+, radios: radios
 }
 

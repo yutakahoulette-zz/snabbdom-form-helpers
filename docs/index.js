@@ -12,12 +12,26 @@ var fh = require('../index')
 var container = document.getElementById('container')
 
 var vnode = h('div', [ 
-  h('label', 'Phone number')
-, fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
-, h('label', 'Credit card')
-, fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
-, h('label', 'Check box')
-, fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
+  h('section', [
+    h('label', 'Phone number')
+  , fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
+  ])
+, h('section', [
+    h('label', 'Credit card')
+  , fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
+  ])
+, h('section', [
+    h('label', 'Check box')
+  , fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
+  ])
+, h('section', [
+    h('label', 'Radios')
+  , fh.radios({name: 'payment-method', labels: [
+      {name: 'check'}
+    , {name: 'credit card'}
+    , {name: 'cash'}
+    ]})
+  ])
 ])
 
 patch(container, vnode)
