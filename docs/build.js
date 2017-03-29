@@ -31,7 +31,7 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Select')
-  , fh.select({placeholder: 'Contact preference', name: 'contact-preference', options: [
+  , fh.select({selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
     'SMS', 'phone', 'email', 'mail']})
   ])
 ])
@@ -75,7 +75,7 @@ var formatPhone = function(num) {
   )(num)
 }
 
-var blockNonNumeric = function(target) {
+var blockInput = function(target) {
   target.value = String(target.value).slice(0, -1)
 }
 
@@ -84,13 +84,17 @@ var mask = function(ev, targetUpdate) {
   var value = removeSpace(target.value)
   // only allow numbers
   if(!Number(value)) {
-    blockNonNumeric(target)
+    blockInput(target)
     return 
   }
   targetUpdate(target, value)
 }
 
 var updatePhoneInput = function(target, value) {
+  if(value.length > 10) {
+    blockInput(target)
+    return 
+  }
   target.value = formatPhone(value)
 }
 
@@ -184,13 +188,15 @@ var option = function(selected) {
 var select = function(obj) {
   var placeholder = [h('option', {
     props: {
-      disabled: 'true'
-    , value: ' '
-    , selected: 'true'
+      disabled: true
+    , value: undefined 
+    , selected: true
     }
   }, obj.placeholder || 'Select One')]
 
-  return h('select', {props: {name: obj.name}}
+  return h('select', {
+    class: obj.classes ? classObj(obj.classes) : {}
+  , props: {name: obj.name}}
   , concat(placeholder, map(option(obj.selected), obj.options)))
 }
 

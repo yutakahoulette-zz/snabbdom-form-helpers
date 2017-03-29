@@ -30,7 +30,7 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Select')
-  , fh.select({placeholder: 'Contact preference', name: 'contact-preference', options: [
+  , fh.select({selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
     'SMS', 'phone', 'email', 'mail']})
   ])
 ])

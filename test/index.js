@@ -43,7 +43,7 @@ test('checkBox', function(t)  {
   t.end()
 })
 
-test('checkBox', function(t)  {
+test('radios', function(t)  {
   var radios = fh.radios({selected: 'cash', classes: '.red.h1', name: 'payment-method', options: ['check', 'credit card', 'cash']})
   var cash = radios.children[2] 
   var input = cash.children[0]
@@ -56,6 +56,21 @@ test('checkBox', function(t)  {
   t.equal(input.data.props.name, 'payment-method')
   t.equal(input.data.props.value, 'cash')
   t.ok(input.data.props.checked)
+  t.end()
+})
+
+test('select', function(t)  {
+  var select = fh.select({selected: 'phone', classes: '.red.h1', placeholder: 'Contact preference', name: 'contact-preference', options: ['SMS', 'phone', 'email', 'mail']})
+  var placeholder = select.children[0] 
+  var phone = select.children[2] 
+  t.equal(select.children.length, 5)
+  t.ok(select.data.class.red)
+  t.ok(select.data.class.h1)
+  t.ok(phone.data.props.selected)
+  t.equal(phone.data.props.value, 'phone')
+  t.equal(phone.text, 'phone')
+  t.ok(placeholder.data.props.disabled)
+  t.equal(placeholder.text, 'Contact preference')
   t.end()
 })
 
