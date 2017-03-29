@@ -66,7 +66,7 @@ h('div', [
 
 ### phoneInput
 
-- simply formats a 9 digit number into three parts (formats `123456780` to `123 456 7890`)
+- simply formats a 10 digit number into three parts (formats `123456780` to `123 456 7890`)
 - does not do any validation
 - meant only for US phone numbers
 
