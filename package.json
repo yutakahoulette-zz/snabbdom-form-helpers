@@ -1,11 +1,12 @@
 {
   "name": "snabbdom-form-helpers",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "snabbdom form helpers",
   "main": "index.js",
   "scripts": {
     "test": "browserify test/index.js | tape-run | tap-spec || true",
-    "watch": "watchify docs/index.js -o docs/build.js -v || true"
+    "watch": "watchify docs/index.js -o docs/build.js -v || true",
+    "build": "browserify docs/index.js -o docs/build.js -v || true"
   },
   "author": "Yutaka Houlette <yutakahoulette@gmail.com> (http://yutakahoulette.com/)",
   "license": "MIT",

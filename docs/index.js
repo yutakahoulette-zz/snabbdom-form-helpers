@@ -11,14 +11,16 @@ var fh = require('../index')
 
 var container = document.getElementById('container')
 
+var cb = function(ev) { console.log(ev.target.value) }
+
 var vnode = h('div', [ 
   h('section', [
     h('label', 'Phone number')
-  , fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
+  , fh.phoneInput({cb: cb, name: 'phone', value: '1234567890', placeholder: 'Phone number'})
   ])
 , h('section', [
     h('label', 'Credit card')
-  , fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
+  , fh.cardInput({cb: cb, name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
   ])
 , h('section', [
     h('label', 'Check box')

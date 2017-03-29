@@ -50,6 +50,7 @@ name | String | value of name property of the input | false
 value | String | value of input | false
 placeholder | String | placeholder text | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
+cb | Function | callback function that gets called on `input` event | false
 
 ``` javascript
 var fh = require('snabbdom-form-helpers')
@@ -78,6 +79,7 @@ name | String | value of name property of the input | false
 placeholder | String | placeholder text | false
 value | String | value of input | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
+cb | Function | callback function that gets called on `input` event | false
 
 ``` javascript
 var fh = require('snabbdom-form-helpers')

@@ -71,6 +71,8 @@ test('select', function(t)  {
   t.equal(phone.text, 'phone')
   t.ok(placeholder.data.props.disabled)
   t.equal(placeholder.text, 'Contact preference')
+  var noPlaceholder = fh.select({options: ['SMS', 'phone', 'email', 'mail']})
+  t.equal(noPlaceholder.children[0].text, 'SMS')
   t.end()
 })
 

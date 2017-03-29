@@ -12,14 +12,16 @@ var fh = require('../index')
 
 var container = document.getElementById('container')
 
+var cb = function(ev) { console.log(ev.target.value) }
+
 var vnode = h('div', [ 
   h('section', [
     h('label', 'Phone number')
-  , fh.phoneInput({name: 'phone', value: '1234567890', placeholder: 'Phone number'})
+  , fh.phoneInput({cb: cb, name: 'phone', value: '1234567890', placeholder: 'Phone number'})
   ])
 , h('section', [
     h('label', 'Credit card')
-  , fh.cardInput({name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
+  , fh.cardInput({cb: cb, name: 'card', value: '4242424242424242', placeholder: 'Credit card number'})
   ])
 , h('section', [
     h('label', 'Check box')
@@ -79,7 +81,7 @@ var blockInput = function(target) {
   target.value = String(target.value).slice(0, -1)
 }
 
-var mask = function(ev, targetUpdate) {
+var mask = function(ev, targetUpdate, cb) {
   var target = ev.target
   var value = removeSpace(target.value)
   // only allow numbers
@@ -87,6 +89,7 @@ var mask = function(ev, targetUpdate) {
     blockInput(target)
     return 
   }
+  cb && cb(ev) 
   targetUpdate(target, value)
 }
 
@@ -103,9 +106,9 @@ var updateCardInput = function(target, value) {
   target.setAttribute('data-card-type', card.type(value, true))
 }
 
-var phoneMask = function(ev) { return mask(ev, updatePhoneInput) }
+var phoneMask = function(cb) { return function(ev) { return mask(ev, updatePhoneInput, cb) }}
 
-var cardMask = function(ev) { return mask(ev, updateCardInput) }
+var cardMask = function(cb) { return function(ev) { return mask(ev, updateCardInput, cb) }}
 
 var props = function(name, placeholder, value) {
   return { 
@@ -118,7 +121,7 @@ var props = function(name, placeholder, value) {
 
 var phoneInput = function(obj) {
   return h('input', {
-    on: {input: phoneMask}
+    on: {input: phoneMask(obj.cb)}
   , class: obj.classes ? classObj(obj.classes) : {}
   , props: props(obj.name, obj.placeholder, obj.value && Number(obj.value) ? formatPhone(obj.value) : '')
   })
@@ -126,7 +129,7 @@ var phoneInput = function(obj) {
 
 var cardInput = function(obj) {
   return h('input', {
-    on: {input: cardMask}
+    on: {input: cardMask(obj.cb)}
   , class: obj.classes ? classObj(obj.classes) : {}
   , props: props(obj.name, obj.placeholder, obj.value ? card.format(obj.value) : '')
   , attrs: {
@@ -186,18 +189,18 @@ var option = function(selected) {
 }
 
 var select = function(obj) {
-  var placeholder = [h('option', {
+  var placeholder = text => [h('option', {
     props: {
       disabled: true
     , value: undefined 
     , selected: true
     }
-  }, obj.placeholder || 'Select One')]
+  }, text)]
 
   return h('select', {
     class: obj.classes ? classObj(obj.classes) : {}
   , props: {name: obj.name}}
-  , concat(placeholder, map(option(obj.selected), obj.options)))
+  , concat(obj.placeholder ? placeholder(obj.placeholder) : [], map(option(obj.selected), obj.options)))
 }
 
 module.exports = {
