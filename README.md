@@ -1,18 +1,21 @@
 ## Snabbdom form helpers
 
+#### [Demo](http://yutakahoulette.com/snabbdom-form-helpers)
+
+`npm install snabbdom-form-helpers`
+
 Provides helpers for the following form elements:
-- checkbox (handles setting unique ID for input and label)
+- checkbox (handles setting unique `id` for input and `for` attr for label)
 - credit card input (uses [creditcards package](https://www.npmjs.com/package/creditcards) to format number and set card type to `data-credit-card` attribute)
 - phone number input (formats `123456780` to `123 456 7890`)
-- radios (handles setting unique ID) 
+- radios (handles setting unique `id` for input and `for` attr for label) 
 - select
-
 
 ### checkBox
 
-- handles setting unique ID for input and label
+- handles setting unique `id` for input and `for` attr for label
 
-takes on object with the following properties:
+takes an object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
@@ -39,7 +42,7 @@ h('div', [
 
 - uses [creditcards package](https://www.npmjs.com/package/creditcards) to format number and set card type to `data-credit-card` attribute
 
-takes on object with the following properties:
+takes an object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
@@ -61,14 +64,13 @@ h('div', [
 ])
 ```
 
-
 ### phoneInput
 
 - simply formats a 9 digit number into three parts (formats `123456780` to `123 456 7890`)
 - does not do any validation
 - meant only for US phone numbers
 
-takes on object with the following properties:
+takes an object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
@@ -92,9 +94,9 @@ h('div', [
 
 ### radios
 
-- handles setting unique ID for input and label
+- handles setting unique `id` for input and `for` attr for label
 
-takes on object with the following properties:
+takes an object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
@@ -114,7 +116,7 @@ h('div', [
 
 ### select
 
-takes on object with the following properties:
+takes an object with the following properties:
 
 key | type | explanation | required |
 --- | --- | --- | ---
@@ -124,7 +126,6 @@ selected | String | will select an option if the selected string matches the opt
 placeholder | String | placeholder option | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
 
-
 ``` javascript
 var fh = require('snabbdom-form-helpers')
 
@@ -133,5 +134,3 @@ h('div', [
 , fh.select({name: 'contact-preference', options: ['SMS', 'Email', 'phone']})
 ])
 ```
-
-
