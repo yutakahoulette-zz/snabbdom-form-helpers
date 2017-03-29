@@ -1,14 +1,14 @@
 {
   "name": "snabbdom-form-helpers",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "snabbdom form helpers",
   "main": "index.js",
   "scripts": {
     "test": "browserify test/index.js | tape-run | tap-spec || true",
     "watch": "watchify docs/index.js -o docs/build.js -v || true"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Yutaka Houlette <yutakahoulette@gmail.com> (http://yutakahoulette.com/)",
+  "license": "MIT",
   "dependencies": {
     "creditcards": "2.1.2",
     "ramda": "0.23.0",
@@ -23,3 +23,4 @@
     "watchify": "^3.9.0"
   }
 }
+

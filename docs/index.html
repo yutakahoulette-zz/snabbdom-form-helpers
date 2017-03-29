@@ -5,7 +5,10 @@
 </head>
 
 <body>
-  <h2>Snabbdom form helpers</h2>
+  <section>
+    <h2>Snabbdom form helpers</h2>
+    <a href='https://github.com/yutakahoulette/snabbdom-form-helpers'>Docs</a>
+  </section>
   <div id='container'></div>
   <script type='text/javascript' src='build.js'></script>
 </body>
@@ -13,11 +16,12 @@
 <style>
   body {
     padding: 16px;
-    font-family: Source Code Pro,
-      Menlo,
-      Consolas,
-      Liberation Mono,
-      monospace;
+    font-family: 
+      -apple-system,
+      BlinkMacSystemFont, 
+      Segoe UI,
+      Helvetica Neue,
+      Helvetica;
   }
   input,
   input[type=checkbox]+label, 
@@ -61,13 +65,12 @@
     width: 16px;
     line-height: 16px;
     border: 1px solid grey;
-    content: "×";
+    content: "M";
   }
   input[type=checkbox]:checked+label:before, 
   input[type=radio]:checked+label:before {
     border-color: #0176f5;
     background: #78b6ff;
-    color: #fff;
   }
   input[type=radio]+label:before {
     border-radius: 100%;
