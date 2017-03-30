@@ -13,6 +13,10 @@ var container = document.getElementById('container')
 
 var cb = function(ev) { console.log(ev.target.value) }
 
+var disabled = function(option) {
+  return option === 'mail'
+}
+
 var vnode = h('div', [ 
   h('section', [
     h('label', 'Phone number')
@@ -32,7 +36,7 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Select')
-  , fh.select({cb: cb, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
+  , fh.select({cb: cb, disabled: disabled, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
     'SMS', 'phone', 'email', 'mail']})
   ])
 ])

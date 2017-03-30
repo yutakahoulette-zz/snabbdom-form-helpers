@@ -114,8 +114,7 @@ var fh = require('snabbdom-form-helpers')
 
 h('div', [
   h('label', 'Radios')
-, fh.radios({selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
-])
+, fh.radios({cb: cb, selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
 ```
 
 ### select
@@ -129,13 +128,18 @@ options | Array of strings | a select option will be created for each of these o
 selected | String | will select an option if the selected string matches the option's value| false
 placeholder | String | placeholder option | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
+disabled | Function | function that disables an option if the return value is
+truthy | false
 cb | Function | callback function that gets called on `change` event | false
 
 ``` javascript
 var fh = require('snabbdom-form-helpers')
 
+var disabled = function(option) {return option ==='mail'}
+
 h('div', [
-  h('label', 'Radios')
-, fh.select({name: 'contact-preference', options: ['SMS', 'Email', 'phone']})
+  h('label', 'Select')
+, fh.select({cb: cb, disabled: disabled, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
+  'SMS', 'phone', 'email', 'mail']})
 ])
 ```

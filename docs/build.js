@@ -14,6 +14,10 @@ var container = document.getElementById('container')
 
 var cb = function(ev) { console.log(ev.target.value) }
 
+var disabled = function(option) {
+  return option === 'mail'
+}
+
 var vnode = h('div', [ 
   h('section', [
     h('label', 'Phone number')
@@ -33,7 +37,7 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Select')
-  , fh.select({cb: cb, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
+  , fh.select({cb: cb, disabled: disabled, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
     'SMS', 'phone', 'email', 'mail']})
   ])
 ])
@@ -179,11 +183,12 @@ var radios = function(obj) {
   , map(radio(obj.name, obj.selected, obj.cb), obj.options))
 }
 
-var option = function(selected) {
+var option = function(selected, disabled) {
   return function(option) {
     return h('option', {
       props: {
         value: option
+      , disabled: disabled ? disabled(option) : false 
       , selected: selected && selected === option
       }
     }, option)
@@ -203,7 +208,7 @@ var select = function(obj) {
     on: obj.cb ? {change: obj.cb} : {}
   , class: obj.classes ? classObj(obj.classes) : {}
   , props: {name: obj.name}}
-  , concat(obj.placeholder ? placeholder(obj.placeholder) : [], map(option(obj.selected), obj.options)))
+  , concat(obj.placeholder ? placeholder(obj.placeholder) : [], map(option(obj.selected, obj.disabled), obj.options)))
 }
 
 module.exports = {
