@@ -25,15 +25,15 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Check box')
-  , fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
+  , fh.checkBox({cb: cb, name: 'anonymous', value: 't', label: 'Donate anonymously?'})
   ])
 , h('section', [
     h('label', 'Radios')
-  , fh.radios({selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
+  , fh.radios({cb: cb, selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
   ])
 , h('section', [
     h('label', 'Select')
-  , fh.select({selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
+  , fh.select({cb: cb, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
     'SMS', 'phone', 'email', 'mail']})
   ])
 ])
@@ -85,7 +85,7 @@ var mask = function(ev, targetUpdate, cb) {
   var target = ev.target
   var value = removeSpace(target.value)
   // only allow numbers
-  if(!Number(value)) {
+  if(!Number(value + 1)) {
     blockInput(target)
     return 
   }
@@ -142,7 +142,8 @@ var checkBox = function(obj){
   var id = uuid()
   return h('div', {class: obj.classes ? classObj(obj.classes) : {}}, [
     h('input', {
-      props: {
+      on: obj.cb ? {change: obj.cb} : {}
+    , props: {
         type: 'checkbox'
       , id: id
       , value: obj.value
@@ -154,12 +155,13 @@ var checkBox = function(obj){
   ])
 }
 
-var radio = function(name, selected) {
+var radio = function(name, selected, cb) {
   return function(option) {
     var id = uuid()
     return h('div', [
         h('input', {
-          props: {
+          on: cb ? {change: cb} : {}
+        , props: {
             type: 'radio'
           , id: id
           , name: name
@@ -174,7 +176,7 @@ var radio = function(name, selected) {
 
 var radios = function(obj) {
   return h('div', {class: obj.classes ? classObj(obj.classes) : {}}
-  , map(radio(obj.name, obj.selected), obj.options))
+  , map(radio(obj.name, obj.selected, obj.cb), obj.options))
 }
 
 var option = function(selected) {
@@ -198,7 +200,8 @@ var select = function(obj) {
   }, text)]
 
   return h('select', {
-    class: obj.classes ? classObj(obj.classes) : {}
+    on: obj.cb ? {change: obj.cb} : {}
+  , class: obj.classes ? classObj(obj.classes) : {}
   , props: {name: obj.name}}
   , concat(obj.placeholder ? placeholder(obj.placeholder) : [], map(option(obj.selected), obj.options)))
 }

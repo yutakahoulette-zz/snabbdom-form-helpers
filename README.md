@@ -24,6 +24,7 @@ label | String | label text | true
 name | String | value of name property of the input | false
 checked | Boolean | whether the checkbox is checked | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
+cb | Function | callback function that gets called on `change` event | false
 
 ``` javascript
 var fh = require('snabbdom-form-helpers')
@@ -106,6 +107,7 @@ name | String | value of name property of the input | true
 options | Array of strings | an input and label will be created for each of these label strings  | true
 selected | String | will check an input if the selected string matches the input's value| false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
+cb | Function | callback function that gets called on `change` event | false
 
 ``` javascript
 var fh = require('snabbdom-form-helpers')
@@ -127,6 +129,7 @@ options | Array of strings | a select option will be created for each of these o
 selected | String | will select an option if the selected string matches the option's value| false
 placeholder | String | placeholder option | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
+cb | Function | callback function that gets called on `change` event | false
 
 ``` javascript
 var fh = require('snabbdom-form-helpers')

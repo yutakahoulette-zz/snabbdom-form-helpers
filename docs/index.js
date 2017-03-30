@@ -24,15 +24,15 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Check box')
-  , fh.checkBox({name: 'anonymous', value: 't', label: 'Donate anonymously?'})
+  , fh.checkBox({cb: cb, name: 'anonymous', value: 't', label: 'Donate anonymously?'})
   ])
 , h('section', [
     h('label', 'Radios')
-  , fh.radios({selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
+  , fh.radios({cb: cb, selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
   ])
 , h('section', [
     h('label', 'Select')
-  , fh.select({selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
+  , fh.select({cb: cb, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
     'SMS', 'phone', 'email', 'mail']})
   ])
 ])
