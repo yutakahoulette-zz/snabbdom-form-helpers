@@ -14,7 +14,6 @@ var container = document.getElementById('container')
 var cb = function(ev) { console.log(ev.target.value) }
 
 var disabled = function(option) {
-  debugger
   return option === 'mail'
 }
 
@@ -33,7 +32,12 @@ var vnode = h('div', [
   ])
 , h('section', [
     h('label', 'Radios')
-  , fh.radios({cb: cb, selected: 'check', name: 'payment-method', options: ['check', 'credit card', 'cash']})
+  , fh.radios({
+      cb: cb
+    , selected: 'check'
+    , name: 'payment-method'
+    , options: [ {label: 'check'}, {label: 'credit card'}, {label: 'cash', value: 'money'}]
+    })
   ])
 , h('section', [
     h('label', 'Select')

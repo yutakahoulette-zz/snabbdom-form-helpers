@@ -44,7 +44,7 @@ test('checkBox', function(t)  {
 })
 
 test('radios', function(t)  {
-  var radios = fh.radios({selected: 'cash', classes: '.red.h1', name: 'payment-method', options: ['check', 'credit card', 'cash']})
+  var radios = fh.radios({selected: 'money', classes: '.red.h1', name: 'payment-method', options: [{label:'check'}, {label: 'credit card'}, {label: 'cash', value: 'money'}]})
   var cash = radios.children[2] 
   var input = cash.children[0]
   var label = cash.children[1]
@@ -54,7 +54,7 @@ test('radios', function(t)  {
   t.equal(label.text, 'cash')
   t.equal(label.data.attrs.for, input.data.props.id)
   t.equal(input.data.props.name, 'payment-method')
-  t.equal(input.data.props.value, 'cash')
+  t.equal(input.data.props.value, 'money')
   t.ok(input.data.props.checked)
   t.end()
 })

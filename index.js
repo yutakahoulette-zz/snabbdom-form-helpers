@@ -113,6 +113,8 @@ var checkBox = function(obj){
 
 var radio = function(name, selected, cb, classes) {
   return function(option) {
+    if(!option.label) throw new Error('Radio options objects require a label key')
+    option.value = option.value ? option.value : option.label
     var id = uuid()
     return h('div', {class: classes ? classObj(classes) : {}}, [
         h('input', {
@@ -121,11 +123,11 @@ var radio = function(name, selected, cb, classes) {
             type: 'radio'
           , id: id
           , name: name
-          , checked: selected && selected === option 
-          , value: option 
+          , checked: selected && selected === option.value
+          , value: option.value 
           }
         })
-      , h('label', {attrs: {for: id}}, option)
+      , h('label', {attrs: {for: id}}, option.label)
     ])
   }
 }
