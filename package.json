@@ -1,6 +1,6 @@
 {
   "name": "snabbdom-form-helpers",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "snabbdom form helpers",
   "main": "index.js",
   "scripts": {

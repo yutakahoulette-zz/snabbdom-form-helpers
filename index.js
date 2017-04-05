@@ -111,10 +111,10 @@ var checkBox = function(obj){
   ])
 }
 
-var radio = function(name, selected, cb) {
+var radio = function(name, selected, cb, classes) {
   return function(option) {
     var id = uuid()
-    return h('div', [
+    return h('div', {class: classes ? classObj(classes) : {}}, [
         h('input', {
           on: cb ? {change: cb} : {}
         , props: {
@@ -131,8 +131,7 @@ var radio = function(name, selected, cb) {
 }
 
 var radios = function(obj) {
-  return h('div', {class: obj.classes ? classObj(obj.classes) : {}}
-  , map(radio(obj.name, obj.selected, obj.cb), obj.options))
+  return h('div', map(radio(obj.name, obj.selected, obj.cb, obj.classes), obj.options))
 }
 
 var option = function(selected, disabled) {

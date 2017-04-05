@@ -14,6 +14,7 @@ var container = document.getElementById('container')
 var cb = function(ev) { console.log(ev.target.value) }
 
 var disabled = function(option) {
+  debugger
   return option === 'mail'
 }
 

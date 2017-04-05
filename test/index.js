@@ -48,8 +48,8 @@ test('radios', function(t)  {
   var cash = radios.children[2] 
   var input = cash.children[0]
   var label = cash.children[1]
-  t.ok(radios.data.class.red)
-  t.ok(radios.data.class.h1)
+  t.ok(cash.data.class.red)
+  t.ok(cash.data.class.h1)
   t.equal(radios.children.length, 3)
   t.equal(label.text, 'cash')
   t.equal(label.data.attrs.for, input.data.props.id)
