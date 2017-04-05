@@ -1,5 +1,7 @@
 ## Snabbdom form helpers
 
+[![CircleCI](https://circleci.com/gh/yutakahoulette/snabbdom-form-helpers/tree/master.svg?style=svg)](https://circleci.com/gh/yutakahoulette/snabbdom-form-helpers/tree/master)
+
 #### [Demo](http://yutakahoulette.com/snabbdom-form-helpers)
 
 `npm install snabbdom-form-helpers`
