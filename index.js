@@ -66,7 +66,7 @@ var phoneInput = function(obj) {
   return h('input', {
     on: {input: phoneMask(obj.cb)}
   , class: obj.classes ? classObj(obj.classes) : {}
-  , props: props(obj.name, obj.placeholder, obj.value && Number(obj.value) ? formatPhone(obj.value) : '')
+  , props: props(obj.name, obj.placeholder, formatPhone(obj.value))
   })
 }
 
