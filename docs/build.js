@@ -50,18 +50,14 @@ var vnode = h('div', [
 patch(container, vnode)
 
 
-},{"../index":2,"snabbdom":75,"snabbdom/h":67,"snabbdom/modules/attributes":70,"snabbdom/modules/class":71,"snabbdom/modules/eventlisteners":72,"snabbdom/modules/props":73,"snabbdom/modules/style":74}],2:[function(require,module,exports){
+},{"../index":2,"snabbdom":64,"snabbdom/h":56,"snabbdom/modules/attributes":59,"snabbdom/modules/class":60,"snabbdom/modules/eventlisteners":61,"snabbdom/modules/props":62,"snabbdom/modules/style":63}],2:[function(require,module,exports){
 var h = require('snabbdom/h').default
 var card = require('creditcards/card') 
 var uuid = require('uuid/v4')
-var map = require('ramda/src/map')
 var concat = require('ramda/src/concat')
+var map = require('ramda/src/map')
 var reduce = require('ramda/src/reduce')
 var drop = require('ramda/src/drop')
-var trim = require('ramda/src/trim')
-var join = require('ramda/src/join')
-var splitAt = require('ramda/src/splitAt')
-var compose = require('ramda/src/compose')
 
 var classObj = function(classes) { 
   return reduce(
@@ -74,16 +70,6 @@ var classObj = function(classes) {
 var removeSpace = function(st) {
   if(!st) return ''
   return String(st).trim().replace(/\s/g, '')
-}
-
-var formatPhone = function(num) {
-  return compose(
-    trim()
-  , join(' ')
-  , splitAt(7)
-  , join(' ')
-  , splitAt(3)
-  )(num)
 }
 
 var blockInput = function(target) {
@@ -102,12 +88,13 @@ var mask = function(ev, targetUpdate, cb) {
   targetUpdate(target, value)
 }
 
+var formatPhone = function(value) {
+  var x = value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+  return !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '')
+}
+
 var updatePhoneInput = function(target, value) {
-  if(value.length > 10) {
-    blockInput(target)
-    return 
-  }
-  target.value = formatPhone(value)
+  return target.value = formatPhone(value) 
 }
 
 var updateCardInput = function(target, value) {
@@ -202,13 +189,15 @@ var option = function(selected, disabled) {
 }
 
 var select = function(obj) {
-  var placeholder = text => [h('option', {
-    props: {
-      disabled: true
-    , value: undefined 
-    , selected: true
-    }
-  }, text)]
+  var placeholder = function(text) {
+    return [h('option', {
+      props: {
+        disabled: true
+      , value: undefined 
+      , selected: true
+      }
+    }, text)]
+  }
 
   return h('select', {
     on: obj.cb ? {change: obj.cb} : {}
@@ -229,7 +218,7 @@ module.exports = {
 
 
 
-},{"creditcards/card":6,"ramda/src/compose":10,"ramda/src/concat":11,"ramda/src/drop":13,"ramda/src/join":53,"ramda/src/map":56,"ramda/src/reduce":58,"ramda/src/splitAt":62,"ramda/src/trim":65,"snabbdom/h":67,"uuid/v4":83}],3:[function(require,module,exports){
+},{"creditcards/card":6,"ramda/src/concat":10,"ramda/src/drop":12,"ramda/src/map":50,"ramda/src/reduce":51,"snabbdom/h":56,"uuid/v4":72}],3:[function(require,module,exports){
 'use strict'
 
 var types = exports.types = require('./src/types')
@@ -268,7 +257,7 @@ CardType.prototype.test = function (number, eager) {
   return this[eager ? 'eagerPattern' : 'pattern'].test(number)
 }
 
-},{"xtend/mutable":85}],5:[function(require,module,exports){
+},{"xtend/mutable":74}],5:[function(require,module,exports){
 'use strict'
 
 var Type = require('./type')
@@ -392,7 +381,7 @@ module.exports = extend(ccTypes, {
   }
 })
 
-},{"creditcards-types":3,"to-camel-case":78,"xtend":84}],8:[function(require,module,exports){
+},{"creditcards-types":3,"to-camel-case":67,"xtend":73}],8:[function(require,module,exports){
 'use strict'
 
 module.exports = (function (array) {
@@ -446,43 +435,7 @@ module.exports = _curry2(function bind(fn, thisObj) {
   });
 });
 
-},{"./internal/_arity":17,"./internal/_curry2":23}],10:[function(require,module,exports){
-var pipe = require('./pipe');
-var reverse = require('./reverse');
-
-
-/**
- * Performs right-to-left function composition. The rightmost function may have
- * any arity; the remaining functions must be unary.
- *
- * **Note:** The result of compose is not automatically curried.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig ((y -> z), (x -> y), ..., (o -> p), ((a, b, ..., n) -> o)) -> ((a, b, ..., n) -> z)
- * @param {...Function} ...functions The functions to compose
- * @return {Function}
- * @see R.pipe
- * @example
- *
- *      var classyGreeting = (firstName, lastName) => "The name's " + lastName + ", " + firstName + " " + lastName
- *      var yellGreeting = R.compose(R.toUpper, classyGreeting);
- *      yellGreeting('James', 'Bond'); //=> "THE NAME'S BOND, JAMES BOND"
- *
- *      R.compose(Math.abs, R.add(1), R.multiply(2))(-4) //=> 7
- *
- * @symb R.compose(f, g, h)(a, b) = f(g(h(a, b)))
- */
-module.exports = function compose() {
-  if (arguments.length === 0) {
-    throw new Error('compose requires at least one argument');
-  }
-  return pipe.apply(this, reverse(arguments));
-};
-
-},{"./pipe":57,"./reverse":60}],11:[function(require,module,exports){
+},{"./internal/_arity":16,"./internal/_curry2":22}],10:[function(require,module,exports){
 var _curry2 = require('./internal/_curry2');
 var _isArray = require('./internal/_isArray');
 var _isFunction = require('./internal/_isFunction');
@@ -525,7 +478,7 @@ module.exports = _curry2(function concat(a, b) {
   return a.concat(b);
 });
 
-},{"./internal/_curry2":23,"./internal/_isArray":33,"./internal/_isFunction":34,"./toString":64}],12:[function(require,module,exports){
+},{"./internal/_curry2":22,"./internal/_isArray":32,"./internal/_isFunction":33,"./toString":54}],11:[function(require,module,exports){
 var _arity = require('./internal/_arity');
 var _curry1 = require('./internal/_curry1');
 var _curry2 = require('./internal/_curry2');
@@ -581,7 +534,7 @@ module.exports = _curry2(function curryN(length, fn) {
   return _arity(length, _curryN(length, [], fn));
 });
 
-},{"./internal/_arity":17,"./internal/_curry1":22,"./internal/_curry2":23,"./internal/_curryN":25}],13:[function(require,module,exports){
+},{"./internal/_arity":16,"./internal/_curry1":21,"./internal/_curry2":22,"./internal/_curryN":24}],12:[function(require,module,exports){
 var _curry2 = require('./internal/_curry2');
 var _dispatchable = require('./internal/_dispatchable');
 var _xdrop = require('./internal/_xdrop');
@@ -616,7 +569,7 @@ module.exports = _curry2(_dispatchable(['drop'], _xdrop, function drop(n, xs) {
   return slice(Math.max(0, n), Infinity, xs);
 }));
 
-},{"./internal/_curry2":23,"./internal/_dispatchable":26,"./internal/_xdrop":46,"./slice":61}],14:[function(require,module,exports){
+},{"./internal/_curry2":22,"./internal/_dispatchable":25,"./internal/_xdrop":43,"./slice":53}],13:[function(require,module,exports){
 var _curry2 = require('./internal/_curry2');
 var _equals = require('./internal/_equals');
 
@@ -650,7 +603,7 @@ module.exports = _curry2(function equals(a, b) {
   return _equals(a, b, [], []);
 });
 
-},{"./internal/_curry2":23,"./internal/_equals":27}],15:[function(require,module,exports){
+},{"./internal/_curry2":22,"./internal/_equals":26}],14:[function(require,module,exports){
 var _curry2 = require('./internal/_curry2');
 var _dispatchable = require('./internal/_dispatchable');
 var _filter = require('./internal/_filter');
@@ -700,7 +653,7 @@ module.exports = _curry2(_dispatchable(['filter'], _xfilter, function(pred, filt
   );
 }));
 
-},{"./internal/_curry2":23,"./internal/_dispatchable":26,"./internal/_filter":28,"./internal/_isObject":36,"./internal/_reduce":43,"./internal/_xfilter":48,"./keys":54}],16:[function(require,module,exports){
+},{"./internal/_curry2":22,"./internal/_dispatchable":25,"./internal/_filter":27,"./internal/_isObject":34,"./internal/_reduce":40,"./internal/_xfilter":45,"./keys":49}],15:[function(require,module,exports){
 var _curry2 = require('./internal/_curry2');
 
 
@@ -738,7 +691,7 @@ module.exports = _curry2(function identical(a, b) {
   }
 });
 
-},{"./internal/_curry2":23}],17:[function(require,module,exports){
+},{"./internal/_curry2":22}],16:[function(require,module,exports){
 module.exports = function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
@@ -757,7 +710,7 @@ module.exports = function _arity(n, fn) {
   }
 };
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports = function _arrayFromIterator(iter) {
   var list = [];
   var next;
@@ -767,7 +720,7 @@ module.exports = function _arrayFromIterator(iter) {
   return list;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var _isArray = require('./_isArray');
 
 
@@ -794,14 +747,14 @@ module.exports = function _checkForMethod(methodname, fn) {
   };
 };
 
-},{"./_isArray":33}],20:[function(require,module,exports){
+},{"./_isArray":32}],19:[function(require,module,exports){
 module.exports = function _complement(f) {
   return function() {
     return !f.apply(this, arguments);
   };
 };
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var _indexOf = require('./_indexOf');
 
 
@@ -809,7 +762,7 @@ module.exports = function _contains(a, list) {
   return _indexOf(list, a, 0) >= 0;
 };
 
-},{"./_indexOf":31}],22:[function(require,module,exports){
+},{"./_indexOf":30}],21:[function(require,module,exports){
 var _isPlaceholder = require('./_isPlaceholder');
 
 
@@ -831,7 +784,7 @@ module.exports = function _curry1(fn) {
   };
 };
 
-},{"./_isPlaceholder":37}],23:[function(require,module,exports){
+},{"./_isPlaceholder":35}],22:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -861,7 +814,7 @@ module.exports = function _curry2(fn) {
   };
 };
 
-},{"./_curry1":22,"./_isPlaceholder":37}],24:[function(require,module,exports){
+},{"./_curry1":21,"./_isPlaceholder":35}],23:[function(require,module,exports){
 var _curry1 = require('./_curry1');
 var _curry2 = require('./_curry2');
 var _isPlaceholder = require('./_isPlaceholder');
@@ -901,7 +854,7 @@ module.exports = function _curry3(fn) {
   };
 };
 
-},{"./_curry1":22,"./_curry2":23,"./_isPlaceholder":37}],25:[function(require,module,exports){
+},{"./_curry1":21,"./_curry2":22,"./_isPlaceholder":35}],24:[function(require,module,exports){
 var _arity = require('./_arity');
 var _isPlaceholder = require('./_isPlaceholder');
 
@@ -943,7 +896,7 @@ module.exports = function _curryN(length, received, fn) {
   };
 };
 
-},{"./_arity":17,"./_isPlaceholder":37}],26:[function(require,module,exports){
+},{"./_arity":16,"./_isPlaceholder":35}],25:[function(require,module,exports){
 var _isArray = require('./_isArray');
 var _isTransformer = require('./_isTransformer');
 
@@ -986,7 +939,7 @@ module.exports = function _dispatchable(methodNames, xf, fn) {
   };
 };
 
-},{"./_isArray":33,"./_isTransformer":39}],27:[function(require,module,exports){
+},{"./_isArray":32,"./_isTransformer":37}],26:[function(require,module,exports){
 var _arrayFromIterator = require('./_arrayFromIterator');
 var _functionName = require('./_functionName');
 var _has = require('./_has');
@@ -1097,7 +1050,7 @@ module.exports = function _equals(a, b, stackA, stackB) {
   return true;
 };
 
-},{"../identical":16,"../keys":54,"../type":66,"./_arrayFromIterator":18,"./_functionName":29,"./_has":30}],28:[function(require,module,exports){
+},{"../identical":15,"../keys":49,"../type":55,"./_arrayFromIterator":17,"./_functionName":28,"./_has":29}],27:[function(require,module,exports){
 module.exports = function _filter(fn, list) {
   var idx = 0;
   var len = list.length;
@@ -1112,19 +1065,19 @@ module.exports = function _filter(fn, list) {
   return result;
 };
 
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 module.exports = function _functionName(f) {
   // String(x => x) evaluates to "x => x", so the pattern may not match.
   var match = String(f).match(/^function (\w*)/);
   return match == null ? '' : match[1];
 };
 
-},{}],30:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 module.exports = function _has(prop, obj) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 
-},{}],31:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var equals = require('../equals');
 
 
@@ -1183,7 +1136,7 @@ module.exports = function _indexOf(list, a, idx) {
   return -1;
 };
 
-},{"../equals":14}],32:[function(require,module,exports){
+},{"../equals":13}],31:[function(require,module,exports){
 var _has = require('./_has');
 
 
@@ -1194,7 +1147,7 @@ module.exports = (function() {
     function _isArguments(x) { return _has('callee', x); };
 }());
 
-},{"./_has":30}],33:[function(require,module,exports){
+},{"./_has":29}],32:[function(require,module,exports){
 /**
  * Tests whether or not an object is an array.
  *
@@ -1213,39 +1166,34 @@ module.exports = Array.isArray || function _isArray(val) {
           Object.prototype.toString.call(val) === '[object Array]');
 };
 
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports = function _isFunction(x) {
   return Object.prototype.toString.call(x) === '[object Function]';
 };
 
-},{}],35:[function(require,module,exports){
-module.exports = function _isNumber(x) {
-  return Object.prototype.toString.call(x) === '[object Number]';
-};
-
-},{}],36:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = function _isObject(x) {
   return Object.prototype.toString.call(x) === '[object Object]';
 };
 
-},{}],37:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = function _isPlaceholder(a) {
   return a != null &&
          typeof a === 'object' &&
          a['@@functional/placeholder'] === true;
 };
 
-},{}],38:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = function _isString(x) {
   return Object.prototype.toString.call(x) === '[object String]';
 };
 
-},{}],39:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = function _isTransformer(obj) {
   return typeof obj['@@transducer/step'] === 'function';
 };
 
-},{}],40:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 module.exports = function _map(fn, functor) {
   var idx = 0;
   var len = functor.length;
@@ -1257,14 +1205,7 @@ module.exports = function _map(fn, functor) {
   return result;
 };
 
-},{}],41:[function(require,module,exports){
-module.exports = function _pipe(f, g) {
-  return function() {
-    return g.call(this, f.apply(this, arguments));
-  };
-};
-
-},{}],42:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 module.exports = function _quote(s) {
   var escaped = s
     .replace(/\\/g, '\\\\')
@@ -1279,7 +1220,7 @@ module.exports = function _quote(s) {
   return '"' + escaped.replace(/"/g, '\\"') + '"';
 };
 
-},{}],43:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var _xwrap = require('./_xwrap');
 var bind = require('../bind');
 var isArrayLike = require('../isArrayLike');
@@ -1338,7 +1279,7 @@ module.exports = (function() {
   };
 }());
 
-},{"../bind":9,"../isArrayLike":52,"./_xwrap":50}],44:[function(require,module,exports){
+},{"../bind":9,"../isArrayLike":48,"./_xwrap":47}],41:[function(require,module,exports){
 /**
  * Polyfill from <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString>.
  */
@@ -1362,7 +1303,7 @@ module.exports = (function() {
     };
 }());
 
-},{}],45:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var _contains = require('./_contains');
 var _map = require('./_map');
 var _quote = require('./_quote');
@@ -1410,7 +1351,7 @@ module.exports = function _toString(x, seen) {
   }
 };
 
-},{"../keys":54,"../reject":59,"./_contains":21,"./_map":40,"./_quote":42,"./_toISOString":44}],46:[function(require,module,exports){
+},{"../keys":49,"../reject":52,"./_contains":20,"./_map":38,"./_quote":39,"./_toISOString":41}],43:[function(require,module,exports){
 var _curry2 = require('./_curry2');
 var _xfBase = require('./_xfBase');
 
@@ -1433,7 +1374,7 @@ module.exports = (function() {
   return _curry2(function _xdrop(n, xf) { return new XDrop(n, xf); });
 }());
 
-},{"./_curry2":23,"./_xfBase":47}],47:[function(require,module,exports){
+},{"./_curry2":22,"./_xfBase":44}],44:[function(require,module,exports){
 module.exports = {
   init: function() {
     return this.xf['@@transducer/init']();
@@ -1443,7 +1384,7 @@ module.exports = {
   }
 };
 
-},{}],48:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 var _curry2 = require('./_curry2');
 var _xfBase = require('./_xfBase');
 
@@ -1462,7 +1403,7 @@ module.exports = (function() {
   return _curry2(function _xfilter(f, xf) { return new XFilter(f, xf); });
 }());
 
-},{"./_curry2":23,"./_xfBase":47}],49:[function(require,module,exports){
+},{"./_curry2":22,"./_xfBase":44}],46:[function(require,module,exports){
 var _curry2 = require('./_curry2');
 var _xfBase = require('./_xfBase');
 
@@ -1481,7 +1422,7 @@ module.exports = (function() {
   return _curry2(function _xmap(f, xf) { return new XMap(f, xf); });
 }());
 
-},{"./_curry2":23,"./_xfBase":47}],50:[function(require,module,exports){
+},{"./_curry2":22,"./_xfBase":44}],47:[function(require,module,exports){
 module.exports = (function() {
   function XWrap(fn) {
     this.f = fn;
@@ -1497,50 +1438,7 @@ module.exports = (function() {
   return function _xwrap(fn) { return new XWrap(fn); };
 }());
 
-},{}],51:[function(require,module,exports){
-var _curry2 = require('./internal/_curry2');
-var _isFunction = require('./internal/_isFunction');
-var curryN = require('./curryN');
-var toString = require('./toString');
-
-
-/**
- * Turns a named method with a specified arity into a function that can be
- * called directly supplied with arguments and a target object.
- *
- * The returned function is curried and accepts `arity + 1` parameters where
- * the final parameter is the target object.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig Number -> String -> (a -> b -> ... -> n -> Object -> *)
- * @param {Number} arity Number of arguments the returned function should take
- *        before the target object.
- * @param {String} method Name of the method to call.
- * @return {Function} A new curried function.
- * @example
- *
- *      var sliceFrom = R.invoker(1, 'slice');
- *      sliceFrom(6, 'abcdefghijklm'); //=> 'ghijklm'
- *      var sliceFrom6 = R.invoker(2, 'slice')(6);
- *      sliceFrom6(8, 'abcdefghijklm'); //=> 'gh'
- * @symb R.invoker(0, 'method')(o) = o['method']()
- * @symb R.invoker(1, 'method')(a, o) = o['method'](a)
- * @symb R.invoker(2, 'method')(a, b, o) = o['method'](a, b)
- */
-module.exports = _curry2(function invoker(arity, method) {
-  return curryN(arity + 1, function() {
-    var target = arguments[arity];
-    if (target != null && _isFunction(target[method])) {
-      return target[method].apply(target, Array.prototype.slice.call(arguments, 0, arity));
-    }
-    throw new TypeError(toString(target) + ' does not have a method named "' + method + '"');
-  });
-});
-
-},{"./curryN":12,"./internal/_curry2":23,"./internal/_isFunction":34,"./toString":64}],52:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 var _curry1 = require('./internal/_curry1');
 var _isArray = require('./internal/_isArray');
 var _isString = require('./internal/_isString');
@@ -1579,32 +1477,7 @@ module.exports = _curry1(function isArrayLike(x) {
   return false;
 });
 
-},{"./internal/_curry1":22,"./internal/_isArray":33,"./internal/_isString":38}],53:[function(require,module,exports){
-var invoker = require('./invoker');
-
-
-/**
- * Returns a string made by inserting the `separator` between each element and
- * concatenating all the elements into a single string.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category List
- * @sig String -> [a] -> String
- * @param {Number|String} separator The string used to separate the elements.
- * @param {Array} xs The elements to join into a string.
- * @return {String} str The string made by concatenating `xs` with `separator`.
- * @see R.split
- * @example
- *
- *      var spacer = R.join(' ');
- *      spacer(['a', 2, 3.4]);   //=> 'a 2 3.4'
- *      R.join('|', [1, 2, 3]);    //=> '1|2|3'
- */
-module.exports = invoker(1, 'join');
-
-},{"./invoker":51}],54:[function(require,module,exports){
+},{"./internal/_curry1":21,"./internal/_isArray":32,"./internal/_isString":36}],49:[function(require,module,exports){
 var _curry1 = require('./internal/_curry1');
 var _has = require('./internal/_has');
 var _isArguments = require('./internal/_isArguments');
@@ -1679,31 +1552,7 @@ module.exports = (function() {
     });
 }());
 
-},{"./internal/_curry1":22,"./internal/_has":30,"./internal/_isArguments":32}],55:[function(require,module,exports){
-var _curry1 = require('./internal/_curry1');
-var _isNumber = require('./internal/_isNumber');
-
-
-/**
- * Returns the number of elements in the array by returning `list.length`.
- *
- * @func
- * @memberOf R
- * @since v0.3.0
- * @category List
- * @sig [a] -> Number
- * @param {Array} list The array to inspect.
- * @return {Number} The length of the array.
- * @example
- *
- *      R.length([]); //=> 0
- *      R.length([1, 2, 3]); //=> 3
- */
-module.exports = _curry1(function length(list) {
-  return list != null && _isNumber(list.length) ? list.length : NaN;
-});
-
-},{"./internal/_curry1":22,"./internal/_isNumber":35}],56:[function(require,module,exports){
+},{"./internal/_curry1":21,"./internal/_has":29,"./internal/_isArguments":31}],50:[function(require,module,exports){
 var _curry2 = require('./internal/_curry2');
 var _dispatchable = require('./internal/_dispatchable');
 var _map = require('./internal/_map');
@@ -1764,45 +1613,7 @@ module.exports = _curry2(_dispatchable(['map'], _xmap, function map(fn, functor)
   }
 }));
 
-},{"./curryN":12,"./internal/_curry2":23,"./internal/_dispatchable":26,"./internal/_map":40,"./internal/_reduce":43,"./internal/_xmap":49,"./keys":54}],57:[function(require,module,exports){
-var _arity = require('./internal/_arity');
-var _pipe = require('./internal/_pipe');
-var reduce = require('./reduce');
-var tail = require('./tail');
-
-
-/**
- * Performs left-to-right function composition. The leftmost function may have
- * any arity; the remaining functions must be unary.
- *
- * In some libraries this function is named `sequence`.
- *
- * **Note:** The result of pipe is not automatically curried.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig (((a, b, ..., n) -> o), (o -> p), ..., (x -> y), (y -> z)) -> ((a, b, ..., n) -> z)
- * @param {...Function} functions
- * @return {Function}
- * @see R.compose
- * @example
- *
- *      var f = R.pipe(Math.pow, R.negate, R.inc);
- *
- *      f(3, 4); // -(3^4) + 1
- * @symb R.pipe(f, g, h)(a, b) = h(g(f(a, b)))
- */
-module.exports = function pipe() {
-  if (arguments.length === 0) {
-    throw new Error('pipe requires at least one argument');
-  }
-  return _arity(arguments[0].length,
-                reduce(_pipe, arguments[0], tail(arguments)));
-};
-
-},{"./internal/_arity":17,"./internal/_pipe":41,"./reduce":58,"./tail":63}],58:[function(require,module,exports){
+},{"./curryN":11,"./internal/_curry2":22,"./internal/_dispatchable":25,"./internal/_map":38,"./internal/_reduce":40,"./internal/_xmap":46,"./keys":49}],51:[function(require,module,exports){
 var _curry3 = require('./internal/_curry3');
 var _reduce = require('./internal/_reduce');
 
@@ -1852,7 +1663,7 @@ var _reduce = require('./internal/_reduce');
  */
 module.exports = _curry3(_reduce);
 
-},{"./internal/_curry3":24,"./internal/_reduce":43}],59:[function(require,module,exports){
+},{"./internal/_curry3":23,"./internal/_reduce":40}],52:[function(require,module,exports){
 var _complement = require('./internal/_complement');
 var _curry2 = require('./internal/_curry2');
 var filter = require('./filter');
@@ -1884,41 +1695,7 @@ module.exports = _curry2(function reject(pred, filterable) {
   return filter(_complement(pred), filterable);
 });
 
-},{"./filter":15,"./internal/_complement":20,"./internal/_curry2":23}],60:[function(require,module,exports){
-var _curry1 = require('./internal/_curry1');
-var _isString = require('./internal/_isString');
-
-
-/**
- * Returns a new list or string with the elements or characters in reverse
- * order.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category List
- * @sig [a] -> [a]
- * @sig String -> String
- * @param {Array|String} list
- * @return {Array|String}
- * @example
- *
- *      R.reverse([1, 2, 3]);  //=> [3, 2, 1]
- *      R.reverse([1, 2]);     //=> [2, 1]
- *      R.reverse([1]);        //=> [1]
- *      R.reverse([]);         //=> []
- *
- *      R.reverse('abc');      //=> 'cba'
- *      R.reverse('ab');       //=> 'ba'
- *      R.reverse('a');        //=> 'a'
- *      R.reverse('');         //=> ''
- */
-module.exports = _curry1(function reverse(list) {
-  return _isString(list) ? list.split('').reverse().join('') :
-                           Array.prototype.slice.call(list, 0).reverse();
-});
-
-},{"./internal/_curry1":22,"./internal/_isString":38}],61:[function(require,module,exports){
+},{"./filter":14,"./internal/_complement":19,"./internal/_curry2":22}],53:[function(require,module,exports){
 var _checkForMethod = require('./internal/_checkForMethod');
 var _curry3 = require('./internal/_curry3');
 
@@ -1951,70 +1728,7 @@ module.exports = _curry3(_checkForMethod('slice', function slice(fromIndex, toIn
   return Array.prototype.slice.call(list, fromIndex, toIndex);
 }));
 
-},{"./internal/_checkForMethod":19,"./internal/_curry3":24}],62:[function(require,module,exports){
-var _curry2 = require('./internal/_curry2');
-var length = require('./length');
-var slice = require('./slice');
-
-
-/**
- * Splits a given list or string at a given index.
- *
- * @func
- * @memberOf R
- * @since v0.19.0
- * @category List
- * @sig Number -> [a] -> [[a], [a]]
- * @sig Number -> String -> [String, String]
- * @param {Number} index The index where the array/string is split.
- * @param {Array|String} array The array/string to be split.
- * @return {Array}
- * @example
- *
- *      R.splitAt(1, [1, 2, 3]);          //=> [[1], [2, 3]]
- *      R.splitAt(5, 'hello world');      //=> ['hello', ' world']
- *      R.splitAt(-1, 'foobar');          //=> ['fooba', 'r']
- */
-module.exports = _curry2(function splitAt(index, array) {
-  return [slice(0, index, array), slice(index, length(array), array)];
-});
-
-},{"./internal/_curry2":23,"./length":55,"./slice":61}],63:[function(require,module,exports){
-var _checkForMethod = require('./internal/_checkForMethod');
-var _curry1 = require('./internal/_curry1');
-var slice = require('./slice');
-
-
-/**
- * Returns all but the first element of the given list or string (or object
- * with a `tail` method).
- *
- * Dispatches to the `slice` method of the first argument, if present.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category List
- * @sig [a] -> [a]
- * @sig String -> String
- * @param {*} list
- * @return {*}
- * @see R.head, R.init, R.last
- * @example
- *
- *      R.tail([1, 2, 3]);  //=> [2, 3]
- *      R.tail([1, 2]);     //=> [2]
- *      R.tail([1]);        //=> []
- *      R.tail([]);         //=> []
- *
- *      R.tail('abc');  //=> 'bc'
- *      R.tail('ab');   //=> 'b'
- *      R.tail('a');    //=> ''
- *      R.tail('');     //=> ''
- */
-module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
-
-},{"./internal/_checkForMethod":19,"./internal/_curry1":22,"./slice":61}],64:[function(require,module,exports){
+},{"./internal/_checkForMethod":18,"./internal/_curry3":23}],54:[function(require,module,exports){
 var _curry1 = require('./internal/_curry1');
 var _toString = require('./internal/_toString');
 
@@ -2057,45 +1771,7 @@ var _toString = require('./internal/_toString');
  */
 module.exports = _curry1(function toString(val) { return _toString(val, []); });
 
-},{"./internal/_curry1":22,"./internal/_toString":45}],65:[function(require,module,exports){
-var _curry1 = require('./internal/_curry1');
-
-
-/**
- * Removes (strips) whitespace from both ends of the string.
- *
- * @func
- * @memberOf R
- * @since v0.6.0
- * @category String
- * @sig String -> String
- * @param {String} str The string to trim.
- * @return {String} Trimmed version of `str`.
- * @example
- *
- *      R.trim('   xyz  '); //=> 'xyz'
- *      R.map(R.trim, R.split(',', 'x, y, z')); //=> ['x', 'y', 'z']
- */
-module.exports = (function() {
-  var ws = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
-           '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028' +
-           '\u2029\uFEFF';
-  var zeroWidth = '\u200b';
-  var hasProtoTrim = (typeof String.prototype.trim === 'function');
-  if (!hasProtoTrim || (ws.trim() || !zeroWidth.trim())) {
-    return _curry1(function trim(str) {
-      var beginRx = new RegExp('^[' + ws + '][' + ws + ']*');
-      var endRx = new RegExp('[' + ws + '][' + ws + ']*$');
-      return str.replace(beginRx, '').replace(endRx, '');
-    });
-  } else {
-    return _curry1(function trim(str) {
-      return str.trim();
-    });
-  }
-}());
-
-},{"./internal/_curry1":22}],66:[function(require,module,exports){
+},{"./internal/_curry1":21,"./internal/_toString":42}],55:[function(require,module,exports){
 var _curry1 = require('./internal/_curry1');
 
 
@@ -2128,7 +1804,7 @@ module.exports = _curry1(function type(val) {
          Object.prototype.toString.call(val).slice(8, -1);
 });
 
-},{"./internal/_curry1":22}],67:[function(require,module,exports){
+},{"./internal/_curry1":21}],56:[function(require,module,exports){
 "use strict";
 var vnode_1 = require("./vnode");
 var is = require("./is");
@@ -2188,7 +1864,7 @@ exports.h = h;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = h;
 
-},{"./is":69,"./vnode":77}],68:[function(require,module,exports){
+},{"./is":58,"./vnode":66}],57:[function(require,module,exports){
 "use strict";
 function createElement(tagName) {
     return document.createElement(tagName);
@@ -2255,7 +1931,7 @@ exports.htmlDomApi = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.htmlDomApi;
 
-},{}],69:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 exports.array = Array.isArray;
 function primitive(s) {
@@ -2263,7 +1939,7 @@ function primitive(s) {
 }
 exports.primitive = primitive;
 
-},{}],70:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 var NamespaceURIs = {
     "xlink": "http://www.w3.org/1999/xlink"
@@ -2323,7 +1999,7 @@ exports.attributesModule = { create: updateAttrs, update: updateAttrs };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.attributesModule;
 
-},{}],71:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 function updateClass(oldVnode, vnode) {
     var cur, name, elm = vnode.elm, oldClass = oldVnode.data.class, klass = vnode.data.class;
@@ -2349,7 +2025,7 @@ exports.classModule = { create: updateClass, update: updateClass };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.classModule;
 
-},{}],72:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 function invokeHandler(handler, vnode, event) {
     if (typeof handler === "function") {
@@ -2445,7 +2121,7 @@ exports.eventListenersModule = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.eventListenersModule;
 
-},{}],73:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 function updateProps(oldVnode, vnode) {
     var key, cur, old, elm = vnode.elm, oldProps = oldVnode.data.props, props = vnode.data.props;
@@ -2472,7 +2148,7 @@ exports.propsModule = { create: updateProps, update: updateProps };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.propsModule;
 
-},{}],74:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 "use strict";
 var raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
 var nextFrame = function (fn) { raf(function () { raf(fn); }); };
@@ -2559,7 +2235,7 @@ exports.styleModule = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.styleModule;
 
-},{}],75:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 "use strict";
 var vnode_1 = require("./vnode");
 var is = require("./is");
@@ -2866,7 +2542,7 @@ function init(modules, domApi) {
 }
 exports.init = init;
 
-},{"./h":67,"./htmldomapi":68,"./is":69,"./thunk":76,"./vnode":77}],76:[function(require,module,exports){
+},{"./h":56,"./htmldomapi":57,"./is":58,"./thunk":65,"./vnode":66}],65:[function(require,module,exports){
 "use strict";
 var h_1 = require("./h");
 function copyToThunk(vnode, thunk) {
@@ -2913,7 +2589,7 @@ exports.thunk = function thunk(sel, key, fn, args) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.thunk;
 
-},{"./h":67}],77:[function(require,module,exports){
+},{"./h":56}],66:[function(require,module,exports){
 "use strict";
 function vnode(sel, data, children, text, elm) {
     var key = data === undefined ? undefined : data.key;
@@ -2924,7 +2600,7 @@ exports.vnode = vnode;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = vnode;
 
-},{}],78:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 
 var space = require('to-space-case')
 
@@ -2947,7 +2623,7 @@ function toCamelCase(string) {
   })
 }
 
-},{"to-space-case":80}],79:[function(require,module,exports){
+},{"to-space-case":69}],68:[function(require,module,exports){
 
 /**
  * Export.
@@ -3016,7 +2692,7 @@ function uncamelize(string) {
   })
 }
 
-},{}],80:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 
 var clean = require('to-no-case')
 
@@ -3039,7 +2715,7 @@ function toSpaceCase(string) {
   }).trim()
 }
 
-},{"to-no-case":79}],81:[function(require,module,exports){
+},{"to-no-case":68}],70:[function(require,module,exports){
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -3064,7 +2740,7 @@ function bytesToUuid(buf, offset) {
 
 module.exports = bytesToUuid;
 
-},{}],82:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 (function (global){
 // Unique ID creation requires a high quality random # generator.  In the
 // browser this is a little complicated due to unknown quality of Math.random()
@@ -3101,7 +2777,7 @@ if (!rng) {
 module.exports = rng;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],83:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 var rng = require('./lib/rng');
 var bytesToUuid = require('./lib/bytesToUuid');
 
@@ -3132,7 +2808,7 @@ function v4(options, buf, offset) {
 
 module.exports = v4;
 
-},{"./lib/bytesToUuid":81,"./lib/rng":82}],84:[function(require,module,exports){
+},{"./lib/bytesToUuid":70,"./lib/rng":71}],73:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -3153,7 +2829,7 @@ function extend() {
     return target
 }
 
-},{}],85:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;

@@ -1,6 +1,10 @@
 {
   "name": "snabbdom-form-helpers",
-  "version": "0.1.6",
+  "version": "0.1.7",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yutakahoulette/snabbdom-form-helpers.git"
+  },
   "description": "snabbdom form helpers",
   "main": "index.js",
   "scripts": {

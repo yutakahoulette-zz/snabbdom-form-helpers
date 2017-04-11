@@ -1,14 +1,10 @@
 var h = require('snabbdom/h').default
 var card = require('creditcards/card') 
 var uuid = require('uuid/v4')
-var map = require('ramda/src/map')
 var concat = require('ramda/src/concat')
+var map = require('ramda/src/map')
 var reduce = require('ramda/src/reduce')
 var drop = require('ramda/src/drop')
-var trim = require('ramda/src/trim')
-var join = require('ramda/src/join')
-var splitAt = require('ramda/src/splitAt')
-var compose = require('ramda/src/compose')
 
 var classObj = function(classes) { 
   return reduce(
@@ -21,16 +17,6 @@ var classObj = function(classes) {
 var removeSpace = function(st) {
   if(!st) return ''
   return String(st).trim().replace(/\s/g, '')
-}
-
-var formatPhone = function(num) {
-  return compose(
-    trim()
-  , join(' ')
-  , splitAt(7)
-  , join(' ')
-  , splitAt(3)
-  )(num)
 }
 
 var blockInput = function(target) {
@@ -49,12 +35,13 @@ var mask = function(ev, targetUpdate, cb) {
   targetUpdate(target, value)
 }
 
+var formatPhone = function(value) {
+  var x = value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+  return !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '')
+}
+
 var updatePhoneInput = function(target, value) {
-  if(value.length > 10) {
-    blockInput(target)
-    return 
-  }
-  target.value = formatPhone(value)
+  return target.value = formatPhone(value) 
 }
 
 var updateCardInput = function(target, value) {
@@ -149,13 +136,15 @@ var option = function(selected, disabled) {
 }
 
 var select = function(obj) {
-  var placeholder = text => [h('option', {
-    props: {
-      disabled: true
-    , value: undefined 
-    , selected: true
-    }
-  }, text)]
+  var placeholder = function(text) {
+    return [h('option', {
+      props: {
+        disabled: true
+      , value: undefined 
+      , selected: true
+      }
+    }, text)]
+  }
 
   return h('select', {
     on: obj.cb ? {change: obj.cb} : {}
