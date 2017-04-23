@@ -60,7 +60,7 @@ test('radios', function(t)  {
 })
 
 test('select', function(t)  {
-  var select = fh.select({selected: 'phone', classes: '.red.h1', placeholder: 'Contact preference', name: 'contact-preference', options: ['SMS', 'phone', 'email', 'mail']})
+  var select = fh.select({selected: 'phone', classes: '.red.h1', placeholder: 'Contact preference', name: 'contact-preference', options: ['SMS', {value: 'phone', label: 'Phone number'}, 'email', 'mail']})
   var placeholder = select.children[0] 
   var phone = select.children[2] 
   t.equal(select.children.length, 5)
@@ -68,7 +68,7 @@ test('select', function(t)  {
   t.ok(select.data.class.h1)
   t.ok(phone.data.props.selected)
   t.equal(phone.data.props.value, 'phone')
-  t.equal(phone.text, 'phone')
+  t.equal(phone.text, 'Phone number')
   t.ok(placeholder.data.props.disabled)
   t.equal(placeholder.text, 'Contact preference')
   var noPlaceholder = fh.select({options: ['SMS', 'phone', 'email', 'mail']})

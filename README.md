@@ -130,7 +130,7 @@ takes an object with the following properties:
 key | type | explanation | required |
 --- | --- | --- | ---
 name | String | value of name property of the select | false
-options | Array of strings | a select option will be created for each of these option strings  | true
+options | Array of strings or objects | a select option will be created for each of these option strings  or objects | true
 selected | String | will select an option if the selected string matches the option's value| false
 placeholder | String | placeholder option | false
 classes | String | string of class names (`'.mt-2.color-red'`) | false
@@ -145,6 +145,6 @@ var disabled = function(option) {return option ==='mail'}
 h('div', [
   h('label', 'Select')
 , fh.select({cb: cb, disabled: disabled, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
-  'SMS', 'phone', 'email', 'mail']})
+  'SMS', {value: 'phone', label: 'Phone number'}, 'email', 'mail']})
 ])
 ```

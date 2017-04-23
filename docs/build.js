@@ -177,14 +177,16 @@ var radios = function(obj) {
 }
 
 var option = function(selected, disabled) {
-  return function(option) {
+  return function(opt) {
+    var value = (typeof opt === 'object') ? opt.value : opt
+    var label = (typeof opt === 'object') ? opt.label : opt
     return h('option', {
       props: {
-        value: option
-      , disabled: disabled ? disabled(option) : false 
-      , selected: selected && selected === option
+        value: value
+      , disabled: disabled ? disabled(value) : false 
+      , selected: selected && selected === value 
       }
-    }, option)
+    }, label)
   }
 }
 
