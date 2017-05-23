@@ -138,7 +138,7 @@ var checkBox = function(obj){
   var id = uuid()
   return h('div', {class: obj.classes ? classObj(obj.classes) : {}}, [
     h('input', {
-      on: obj.cb ? {change: obj.cb} : {}
+      on: obj.cb ? {click: obj.cb} : {}
     , props: {
         type: 'checkbox'
       , id: id
