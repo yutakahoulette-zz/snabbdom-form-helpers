@@ -34,9 +34,9 @@ var fh = require('snabbdom-form-helpers')
 h('div', [
   h('label', 'Checkbox')
 , fh.checkBox({
-    name: 'anonymous'
-  , value: 't'
-  , label: 'Donate anonymously?'
+    name: 'anonymous',
+    value: 't',
+    label: 'Donate anonymously?'
   })
 ])
 ```
@@ -59,12 +59,12 @@ cb | Function | callback function that gets called on `input` event | false
 var fh = require('snabbdom-form-helpers')
 
 h('div', [
-  h('label', 'Credit card')
-  , fh.cardInput({
-      name: 'card'
-    , value: '4242424242424242'
-    , placeholder: 'Credit card number'
-    })
+  h('label', 'Credit card'),
+  fh.cardInput({
+    name: 'card',     
+    value: '4242424242424242',
+    placeholder: 'Credit card number'
+  })
 ])
 ```
 
@@ -88,12 +88,12 @@ cb | Function | callback function that gets called on `input` event | false
 var fh = require('snabbdom-form-helpers')
 
 h('div', [
-  h('label', 'Phone number')
-  , fh.phoneInput({
-      name: 'phone'
-    , value: '1234567890'
-    , placeholder: 'Credit card number'
-    })
+  h('label', 'Phone number'),
+  fh.phoneInput({
+    name: 'phone',
+    value: '1234567890',
+    placeholder: 'Phone number'
+  })
 ])
 ```
 
@@ -115,12 +115,12 @@ cb | Function | callback function that gets called on `change` event | false
 var fh = require('snabbdom-form-helpers')
 
 h('div', [
-  h('label', 'Radios')
-, fh.radios({cb: cb, selected: 'check', name: 'payment-method', options: [
-    {label: 'check'}
-  , {label: 'credit card', value: 'card'}
-  , {label: 'cash', value: 'money'}
-  ]})
+  h('label', 'Radios'),
+  fh.radios({cb, selected: 'check', name: 'payment-method', options: [
+    {label: 'check'},
+    {label: 'credit card', value: 'card'},
+    {label: 'cash', value: 'money'}
+]})
 ```
 
 ### select
@@ -143,8 +143,15 @@ var fh = require('snabbdom-form-helpers')
 var disabled = function(option) {return option ==='mail'}
 
 h('div', [
-  h('label', 'Select')
-, fh.select({cb: cb, disabled: disabled, selected: 'phone', placeholder: 'Contact preference', name: 'contact-preference', options: [
-  'SMS', {value: 'phone', label: 'Phone number'}, 'email', 'mail']})
+  h('label', 'Select'),
+  fh.select({
+    cb, 
+    disabled, 
+    selected: 'phone', 
+    placeholder: 'Contact preference', 
+    name: 'contact-preference', 
+    options: [
+      'SMS', {value: 'phone', label: 'Phone number'}, 'email', 'mail'
+    ]})
 ])
 ```
